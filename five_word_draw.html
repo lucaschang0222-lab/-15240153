@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>五詞靈感抽籤</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#292d31;color:#f2f0e9;font-family:system-ui,"Microsoft JhengHei",sans-serif}.app{width:min(760px,100%);text-align:center}h1{margin:0 0 8px;font-size:36px}.sub{color:#b9c1c4;margin:0 0 30px}.words{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:24px}.card{min-height:130px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12px 6px;background:#39434a;border:1px solid #60717a;border-radius:14px}.num{color:#9ebbc5;font-size:12px;margin-bottom:12px}.word{font-size:clamp(16px,3vw,24px);font-weight:700;overflow-wrap:anywhere}button{padding:13px 28px;border:0;border-radius:24px;background:#b9d8df;color:#243238;font-size:16px;font-weight:700;cursor:pointer}button:hover{filter:brightness(1.08)}#message{color:#b9c1c4;min-height:24px;margin-top:18px}.tip{color:#89979b;font-size:13px;margin-top:24px}@media(max-width:560px){.words{grid-template-columns:repeat(2,1fr)}.card:last-child{grid-column:1/-1}.card{min-height:105px}}
+</style></head><body><main class="app"><h1>五詞靈感抽籤</h1><p class="sub">讓五個偶然相遇的詞，成為下一個創作的起點。</p>
+<section class="words" id="words" aria-live="polite"><div class="card"><span class="num">WORD 01</span><span class="word">等待抽籤</span></div><div class="card"><span class="num">WORD 02</span><span class="word">等待抽籤</span></div><div class="card"><span class="num">WORD 03</span><span class="word">等待抽籤</span></div><div class="card"><span class="num">WORD 04</span><span class="word">等待抽籤</span></div><div class="card"><span class="num">WORD 05</span><span class="word">等待抽籤</span></div></section>
+<button id="draw">抽出一組</button><p id="message">每組包含五個不重複的詞彙。</p><p class="tip">試著讓五個詞彙彼此發生關係，不必急著解釋它們。</p></main>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/p5.min.js"></script><script>
+// 詞庫與主要設定：可在這裡自行增刪詞彙
+const WORDS=["霧","窗","蔓延","裂縫","潮汐","沉默","漂浮","骨骼","雨季","鏡子","荒原","迴聲","植物","邊界","微光","廢墟","呼吸","階梯","種子","遠方","影子","秩序","失重","沙","記憶","空房","生長","折疊","月台","灰塵","石頭","透明","緩慢","偏移","孤島","根系","縫隙","午後","出口","溫度","觀看","遺失","擁抱","旋轉","寂靜","光線","房間","流動","邂逅","殘影","花園","鐘聲","深處","邊緣","游牧"];
+const WORDS_PER_DRAW=5; // 每組抽出的詞彙數量
+function setup(){noCanvas();document.getElementById("draw").addEventListener("click",drawGroup);}
+function drawGroup(){
+  // Fisher–Yates 洗牌後取前五個，確保一組內不重複且機率相同
+  const shuffled=[...WORDS];
+  for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+  const picked=shuffled.slice(0,WORDS_PER_DRAW);
+  const area=document.getElementById("words");area.replaceChildren();
+  picked.forEach((word,i)=>{
+    const card=document.createElement("div");card.className="card";
+    const number=document.createElement("span");number.className="num";number.textContent=`WORD 0${i+1}`;
+    const value=document.createElement("span");value.className="word";value.textContent=word;
+    card.append(number,value);area.appendChild(card);
+  });
+  document.getElementById("message").textContent="新的一組靈感已經誕生。";
+}
+</script></body></html>
